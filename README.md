@@ -1,2 +1,2 @@
-# curso-especialista-jpa
+# Curso Especialista JPA
 Curso Especialista JPA
