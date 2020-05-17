@@ -109,4 +109,47 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assert.assertNotNull(produtoVerificacao);
     }
+
+    @Test
+    public void mostrarDifencaPersistMerge() {
+        // Persistir via persist
+        Produto produtoPersist = new Produto();
+
+        produtoPersist.setId(5);
+        produtoPersist.setNome("Smartphone One Plus");
+        produtoPersist.setDescricao("O processador mais rápido.");
+        produtoPersist.setPreco(new BigDecimal(2000));
+
+        entityManager.getTransaction().begin();
+        // Apenas persiste um objeto no banco
+        // O próprio objeto passado será gerenciado
+        entityManager.persist(produtoPersist);
+        produtoPersist.setNome("Smartphone Two Plus");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacaoPersist = entityManager.find(Produto.class, produtoPersist.getId());
+        Assert.assertNotNull(produtoVerificacaoPersist);
+
+        // Persistir via merge
+        Produto produtoMerge = new Produto();
+
+        produtoMerge.setId(6);
+        produtoMerge.setNome("Notebook Dell");
+        produtoMerge.setDescricao("O melhor da categoria.");
+        produtoMerge.setPreco(new BigDecimal(2000));
+
+        entityManager.getTransaction().begin();
+        // Pode ser usado para persistir ou atualizar um objeto no banco
+        // O merge retorna uma cópia, portanto é preciso atribuir o retorno para poder gerenciá-lo
+        produtoMerge = entityManager.merge(produtoMerge);
+        produtoMerge.setNome("Notebook Dell 2");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacaoMerge = entityManager.find(Produto.class, produtoMerge.getId());
+        Assert.assertNotNull(produtoVerificacaoMerge);
+    }
 }
