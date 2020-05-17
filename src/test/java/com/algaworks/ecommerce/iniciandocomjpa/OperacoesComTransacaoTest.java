@@ -56,4 +56,23 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificacao = entityManager.find(Produto.class, 3);
         Assert.assertNull(produtoVerificacao);
     }
+
+    @Test
+    public void atualizarObjeto() {
+        Produto produto = new Produto();
+
+        produto.setId(1);
+        produto.setNome("Kindle Paperwhite");
+        produto.setDescricao("Conheça o novo Kindle.");
+        produto.setPreco(new BigDecimal(599));
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
+        Assert.assertNotNull(produtoVerificado);
+    }
 }
