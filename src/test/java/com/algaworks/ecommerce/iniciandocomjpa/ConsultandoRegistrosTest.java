@@ -1,9 +1,7 @@
 package com.algaworks.ecommerce.iniciandocomjpa;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import com.algaworks.ecommerce.model.Produto;
+import org.junit.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,6 +16,11 @@ public class ConsultandoRegistrosTest {
         entityManagerFactory = Persistence.createEntityManagerFactory("Ecommerce-PU");
     }
 
+    @AfterClass
+    public static void tearDownAfterClass() {
+        entityManagerFactory.close();
+    }
+
     @Before
     public void setUp() {
         entityManager = entityManagerFactory.createEntityManager();
@@ -28,8 +31,25 @@ public class ConsultandoRegistrosTest {
         entityManager.close();
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() {
-        entityManagerFactory.close();
+    @Test
+    public void buscarPorIndentificador() {
+        Produto produto = entityManager.find(Produto.class, 1);
+        // Produto produto = entityManager.getReference(Produto.class, 1);
+
+        Assert.assertNotNull(produto);
+        Assert.assertEquals("Kindle", produto.getNome());
     }
+
+    @Test
+    public void atualizarAReferencia() {
+        Produto produto = entityManager.find(Produto.class, 1);
+        produto.setNome("Microfone Samson");
+
+        // faz uma nova busca para atualizar os dados do objeto
+        entityManager.refresh(produto);
+
+        Assert.assertEquals("Kindle", produto.getNome());
+    }
+
+
 }
