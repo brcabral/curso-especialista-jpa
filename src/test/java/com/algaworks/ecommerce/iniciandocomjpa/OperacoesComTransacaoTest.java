@@ -41,4 +41,19 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
         Assert.assertNotNull(produtoVerificado);
     }
+
+    @Test
+    public void removerObjeto() {
+        Produto produto = entityManager.find(Produto.class, 3);
+
+        entityManager.getTransaction().begin();
+        entityManager.remove(produto);
+        entityManager.getTransaction().commit();
+
+        // Não é necessário para a operação de remoção
+        // entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 3);
+        Assert.assertNull(produtoVerificacao);
+    }
 }
