@@ -38,8 +38,8 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         // Caso contrário ele pegará a instância na memória para fazer a verificação do produto
         entityManager.clear();
 
-        Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
-        Assert.assertNotNull(produtoVerificado);
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assert.assertNotNull(produtoVerificacao);
     }
 
     @Test
@@ -72,7 +72,22 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
 
         entityManager.clear();
 
-        Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
-        Assert.assertNotNull(produtoVerificado);
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assert.assertNotNull(produtoVerificacao);
+        Assert.assertEquals("Kindle Paperwhite", produtoVerificacao.getNome());
+    }
+
+    @Test
+    public void atualizarObjetoGErenciado() {
+        Produto produto = entityManager.find(Produto.class, 1);
+
+        entityManager.getTransaction().begin();
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assert.assertEquals("Kindle Paperwhite 2ª Geração", produtoVerificacao.getNome());
     }
 }
