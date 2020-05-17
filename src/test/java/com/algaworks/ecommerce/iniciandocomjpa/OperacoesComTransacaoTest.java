@@ -152,4 +152,22 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificacaoMerge = entityManager.find(Produto.class, produtoMerge.getId());
         Assert.assertNotNull(produtoVerificacaoMerge);
     }
+
+    @Test
+    public void imepdirOperacaoComBancoDeDados() {
+        Produto produto = entityManager.find(Produto.class, 1);
+
+        // Desanexa um objeto que está na memória do Entity Manager
+        // O entity manager deixa de gerenciar a instância
+        entityManager.detach(produto);
+
+        entityManager.getTransaction().begin();
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assert.assertEquals("Kindle", produtoVerificacao.getNome());
+    }
 }
