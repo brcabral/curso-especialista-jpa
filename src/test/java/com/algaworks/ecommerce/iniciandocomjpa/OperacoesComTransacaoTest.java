@@ -90,4 +90,23 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assert.assertEquals("Kindle Paperwhite 2ª Geração", produtoVerificacao.getNome());
     }
+
+    @Test
+    public void inserirObjetoComMerge() {
+        Produto produto = new Produto();
+
+        produto.setId(4);
+        produto.setNome("Microfone Rode Videmic");
+        produto.setDescricao("A melhor qualidade de som");
+        produto.setPreco(new BigDecimal(1000));
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assert.assertNotNull(produtoVerificacao);
+    }
 }
