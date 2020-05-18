@@ -25,6 +25,6 @@ public class NotaFiscal {
 
     private String xml;
 
-    @Column(data_emissao)
+    @Column(name = " data_emissao")
     private Date dataEmissao;
 }
