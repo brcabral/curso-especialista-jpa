@@ -10,7 +10,8 @@ public class MapeandoEnumeracoesTest extends EntityManagerTest {
     @Test
     public void testarEnum() {
         Cliente cliente = new Cliente();
-        cliente.setId(4);
+        // Retirado pois foi configurado o auto incremento na entidade (IDENTITY)
+        // cliente.setId(4);
         cliente.setNome("José Mineiro");
         cliente.setSexo(SexoCliente.MASCULINO);
 
