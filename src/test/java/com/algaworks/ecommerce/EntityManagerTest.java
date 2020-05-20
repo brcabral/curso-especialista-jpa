@@ -1,7 +1,9 @@
 package com.algaworks.ecommerce;
 
-import com.algaworks.ecommerce.model.Produto;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
