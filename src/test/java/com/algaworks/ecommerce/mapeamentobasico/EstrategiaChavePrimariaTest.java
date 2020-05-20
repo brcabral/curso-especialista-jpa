@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class EstrategiaChavePrimariaTest extends EntityManagerTest {
     @Test
-    public void testarEstrategiaChave() {
+    public void testarEstrategiaTable() {
         Categoria categoria = new Categoria();
         categoria.setNome("Eletrônicos");
 
