@@ -1,9 +1,7 @@
 package com.algaworks.ecommerce.relacionamentos;
 
 import com.algaworks.ecommerce.EntityManagerTest;
-import com.algaworks.ecommerce.model.Cliente;
-import com.algaworks.ecommerce.model.Pedido;
-import com.algaworks.ecommerce.model.StatusPedido;
+import com.algaworks.ecommerce.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,5 +27,33 @@ public class RelacionamentoOneToManyTest extends EntityManagerTest {
 
         Cliente clienteLista = entityManager.find(Cliente.class, cliente.getId());
         Assert.assertFalse(clienteLista.getPedidos().isEmpty());
+    }
+
+    @Test
+    public void verificarListaItensPedido() {
+        Cliente cliente = entityManager.find(Cliente.class, 1);
+        Produto produto = entityManager.find(Produto.class, 1);
+
+        Pedido pedido = new Pedido();
+        pedido.setStatus(StatusPedido.AGUARDANDO);
+        pedido.setDataPedido(LocalDateTime.now());
+        pedido.setTotal(BigDecimal.TEN);
+        pedido.setCliente(cliente);
+
+        ItemPedido itemPedido = new ItemPedido();
+        itemPedido.setProduto(produto);
+        itemPedido.setPrecoProduto(produto.getPreco());
+        itemPedido.setQuantidade(2);
+        itemPedido.setPedido(pedido);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(pedido);
+        entityManager.persist(itemPedido);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Pedido pedidoLista = entityManager.find(Pedido.class, pedido.getId());
+        Assert.assertFalse(pedidoLista.getItensPedido().isEmpty());
     }
 }
