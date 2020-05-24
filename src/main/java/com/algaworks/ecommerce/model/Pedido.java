@@ -41,6 +41,9 @@ public class Pedido {
     @Embedded
     private EnderecoEntregaPedido enderecoEntrega;
 
+    @OneToOne(mappedBy = "pedido")
+    private PagamentoCartao pagamento;
+
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itensPedido;
 }
