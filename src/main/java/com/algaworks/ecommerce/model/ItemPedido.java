@@ -12,18 +12,24 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "item_pedido")
+@IdClass(ItemPedidoId.class)
 public class ItemPedido {
     @Id
     @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "pedido_id")
+    private Integer pedidoId;
+
+    @Id
+    @EqualsAndHashCode.Include
+    @Column(name = "produto_id")
+    private Integer produtoId;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "pedido_id")
+    @JoinColumn(name = "pedido_id", insertable = false, updatable = false)
     private Pedido pedido;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_id", insertable = false, updatable = false)
     private Produto produto;
 
     @Column(name = "preco_produto")
