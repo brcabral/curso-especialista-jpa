@@ -2,7 +2,6 @@ package com.algaworks.ecommerce.mapeamentoavancao;
 
 import com.algaworks.ecommerce.EntityManagerTest;
 import com.algaworks.ecommerce.model.*;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.junit.Assert;
 import org.junit.Test;
 

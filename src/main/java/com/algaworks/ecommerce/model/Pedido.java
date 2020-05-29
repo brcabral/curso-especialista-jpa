@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "pedido")
-@EntityListeners({ GerarNotaFiscalListener.class, GenericoListener.class })
+@EntityListeners({GerarNotaFiscalListener.class, GenericoListener.class})
 public class Pedido {
     @Id
     @EqualsAndHashCode.Include
