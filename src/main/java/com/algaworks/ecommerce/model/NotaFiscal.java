@@ -1,6 +1,5 @@
 package com.algaworks.ecommerce.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,15 +8,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "nota_fiscal")
-public class NotaFiscal {
-    @Id
-    @EqualsAndHashCode.Include
-    @Column(name = "pedido_id")
-    private Integer id;
-
+public class NotaFiscal extends EntidadeBaseInteger {
     @MapsId
     @OneToOne(optional = false)
     @JoinColumn(name = "pedido_id")
