@@ -41,7 +41,7 @@ public class Pedido extends EntidadeBaseInteger {
     private EnderecoEntregaPedido enderecoEntrega;
 
     @OneToOne(mappedBy = "pedido")
-    private PagamentoCartao pagamento;
+    private Pagamento pagamento;
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itensPedido;
