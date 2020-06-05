@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @DiscriminatorValue("boleto")
-@Table(name = "pagamento_boleto")
 public class PagamentoBoleto extends Pagamento {
     @Column(name = "codigo_barras")
     private String codigoBarras;
