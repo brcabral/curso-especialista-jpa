@@ -13,6 +13,7 @@ import java.util.List;
         uniqueConstraints = {@UniqueConstraint(name = "unq_nome", columnNames = {"nome"})},
         indexes = {@Index(name = "idx_nome", columnList = "nome")})
 public class Categoria extends EntidadeBaseInteger {
+    @Column(length = 100, nullable = false)
     private String nome;
 
     @ManyToOne
