@@ -29,7 +29,7 @@ public class Produto extends EntidadeBaseInteger {
     @Column(columnDefinition = "varchar(275) default 'descricao'")
     private String descricao;
 
-    @Column(precision = 19, scale = 2) // preco decimal(19, 2)
+    @Lob
     private BigDecimal preco;
 
     @Lob
