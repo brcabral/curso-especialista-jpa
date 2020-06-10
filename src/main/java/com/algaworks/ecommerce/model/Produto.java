@@ -17,6 +17,7 @@ import java.util.List;
         indexes = {@Index(name = "idx_nome", columnList = "nome")})
 @EntityListeners({GenericoListener.class})
 public class Produto extends EntidadeBaseInteger {
+    @Column(length = 100, nullable = false) // nome varchar(100) not null
     private String nome;
 
     @Column(name = "data_criacao", updatable = false)
@@ -25,8 +26,11 @@ public class Produto extends EntidadeBaseInteger {
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
+    // columnDefinition, pode variar de acordo com o banco
+    @Column(columnDefinition = "varchar(275) not null default 'descricao'")
     private String descricao;
 
+    @Column(precision = 10, scale = 2) // preco decimal(10, 2)
     private BigDecimal preco;
 
     @Lob
