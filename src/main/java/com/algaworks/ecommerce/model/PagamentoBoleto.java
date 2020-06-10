@@ -12,6 +12,6 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("boleto")
 public class PagamentoBoleto extends Pagamento {
-    @Column(name = "codigo_barras", length = 100, nullable = false)
+    @Column(name = "codigo_barras", length = 100)
     private String codigoBarras;
 }

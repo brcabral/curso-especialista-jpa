@@ -26,8 +26,7 @@ public class Produto extends EntidadeBaseInteger {
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
-    // columnDefinition, pode variar de acordo com o banco
-    @Column(columnDefinition = "varchar(275) not null default 'descricao'")
+    @Column(columnDefinition = "varchar(275) default 'descricao'")
     private String descricao;
 
     @Column(precision = 19, scale = 2) // preco decimal(19, 2)
