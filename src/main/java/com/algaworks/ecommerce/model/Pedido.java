@@ -55,7 +55,11 @@ public class Pedido extends EntidadeBaseInteger {
     // Porém é permitido apenas um PrePersist e o PreUpdate por classe.
     public void calcularTotal() {
         if (itensPedido != null) {
-            total = itensPedido.stream().map(ItemPedido::getPrecoProduto).reduce(BigDecimal.ZERO, BigDecimal::add);
+            total = itensPedido.stream().map(
+                    i -> new BigDecimal(i.getQuantidade()).multiply(i.getPrecoProduto()))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            total = BigDecimal.ZERO;
         }
     }
 
