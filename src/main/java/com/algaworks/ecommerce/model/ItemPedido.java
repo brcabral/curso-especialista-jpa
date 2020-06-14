@@ -17,7 +17,7 @@ public class ItemPedido {
     private ItemPedidoId id;
 
     @MapsId("pedidoId")
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_item_pedido_pedido"))
     private Pedido pedido;
