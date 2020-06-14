@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class CascadeTypePersistTest extends EntityManagerTest {
-    @Test
+    // @Test
     public void persistirPedidoComItens() {
         Cliente cliente = entityManager.find(Cliente.class, 1);
         Produto produto = entityManager.find(Produto.class, 1);
@@ -41,7 +41,7 @@ public class CascadeTypePersistTest extends EntityManagerTest {
         Assert.assertFalse(pedidoInserido.getItensPedido().isEmpty());
     }
 
-    @Test
+    // @Test
     public void persistirItemPedidoComPedido() {
         Cliente cliente = entityManager.find(Cliente.class, 1);
         Produto produto = entityManager.find(Produto.class, 1);
@@ -68,7 +68,7 @@ public class CascadeTypePersistTest extends EntityManagerTest {
         Assert.assertNotNull(pedidoInserido);
     }
 
-    @Test
+    // @Test
     public void persistirPedidoComCliente() {
         Cliente cliente = new Cliente();
         cliente.setDataNascimento(LocalDate.of(1980, 1, 1));
@@ -89,5 +89,30 @@ public class CascadeTypePersistTest extends EntityManagerTest {
 
         Cliente clienteInserido = entityManager.find(Cliente.class, cliente.getId());
         Assert.assertNotNull(clienteInserido);
+    }
+
+    // @Test
+    public void persistirProdutoComCategoria() {
+        Produto produto = new Produto();
+        produto.setDataCriacao(LocalDateTime.now());
+        produto.setPreco(BigDecimal.TEN);
+        produto.setNome("Fones de ouvido");
+        produto.setDescricao("A melhor qualidade de som");
+
+        Categoria categoria = new Categoria();
+        categoria.setNome("Áudio");
+
+        produto.setCategorias(Arrays.asList(categoria));  // CascadeType.PERSIST
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(produto);
+        entityManager.getTransaction().commit();
+        entityManager.clear();
+
+        Produto produtoInserido = entityManager.find(Produto.class, produto.getId());
+        Assert.assertNotNull(produtoInserido);
+
+        Categoria categoriaInserida = entityManager.find(Categoria.class, categoria.getId());
+        Assert.assertNotNull(categoriaInserida);
     }
 }
