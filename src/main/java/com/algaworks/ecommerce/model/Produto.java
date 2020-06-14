@@ -26,10 +26,9 @@ public class Produto extends EntidadeBaseInteger {
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
-    @Column(columnDefinition = "varchar(275) default 'descricao'")
+    @Lob
     private String descricao;
 
-    @Lob
     private BigDecimal preco;
 
     @Lob
