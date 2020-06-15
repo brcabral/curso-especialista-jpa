@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class BasicoJPQLTest extends EntityManagerTest {
@@ -43,5 +44,16 @@ public class BasicoJPQLTest extends EntityManagerTest {
         TypedQuery<Cliente> typedQueryCliente = entityManager.createQuery(jpqlCliente, Cliente.class);
         List<Cliente> listaClientes = typedQueryCliente.getResultList();
         Assert.assertTrue(Cliente.class.equals(listaClientes.get(0).getClass()));
+    }
+
+    @Test
+    public void projetarResultado() {
+        String jpql = "select id, nome from Produto";
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+        List<Object[]> lista = typedQuery.getResultList();
+
+        Assert.assertTrue(lista.get(0).length == 2);
+
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
     }
 }
