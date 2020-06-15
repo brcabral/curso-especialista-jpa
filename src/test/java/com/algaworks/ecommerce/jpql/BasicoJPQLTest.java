@@ -1,12 +1,14 @@
 package com.algaworks.ecommerce.jpql;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Cliente;
 import com.algaworks.ecommerce.model.Pedido;
 import org.junit.Assert;
 import org.junit.Test;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class BasicoJPQLTest extends EntityManagerTest {
     @Test
@@ -28,5 +30,18 @@ public class BasicoJPQLTest extends EntityManagerTest {
         Query query = entityManager.createQuery(jpql);
         Pedido pedido2 = (Pedido) query.getSingleResult();
         Assert.assertNotNull(pedido2);
+    }
+
+    @Test
+    public void selecinarAtributoParaRetorno() {
+        String jpql = "select p.nome from Produto p";
+        TypedQuery<String> typedQuery = entityManager.createQuery(jpql, String.class);
+        List<String> listaNomes = typedQuery.getResultList();
+        Assert.assertTrue(String.class.equals(listaNomes.get(0).getClass()));
+
+        String jpqlCliente = "select p.cliente from Pedido p";
+        TypedQuery<Cliente> typedQueryCliente = entityManager.createQuery(jpqlCliente, Cliente.class);
+        List<Cliente> listaClientes = typedQueryCliente.getResultList();
+        Assert.assertTrue(Cliente.class.equals(listaClientes.get(0).getClass()));
     }
 }
