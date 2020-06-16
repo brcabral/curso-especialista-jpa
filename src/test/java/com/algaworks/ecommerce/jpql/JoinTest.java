@@ -1,6 +1,7 @@
 package com.algaworks.ecommerce.jpql;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Pedido;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,6 +26,21 @@ public class JoinTest extends EntityManagerTest {
 
         TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
         List<Object[]> lista = typedQuery.getResultList();
+
+        // Assert.assertTrue(lista.size() == 2);
+        Assert.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void usarJoinFetch() {
+        // O fetch busca os dados das demais entidades em um único select
+        String jpql = "select p from Pedido p " +
+                "left join fetch p.pagamento " +
+                "join fetch p.cliente " +
+                "left join fetch p.notaFiscal";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        List<Pedido> lista = typedQuery.getResultList();
 
         // Assert.assertTrue(lista.size() == 2);
         Assert.assertFalse(lista.isEmpty());
