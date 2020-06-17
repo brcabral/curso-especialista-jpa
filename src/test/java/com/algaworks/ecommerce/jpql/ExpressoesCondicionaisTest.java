@@ -1,6 +1,7 @@
 package com.algaworks.ecommerce.jpql;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Cliente;
 import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.Produto;
 import org.junit.Assert;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExpressoesCondicionaisTest extends EntityManagerTest {
@@ -142,5 +144,21 @@ public class ExpressoesCondicionaisTest extends EntityManagerTest {
         Assert.assertFalse(lista.isEmpty());
 
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
+
+    @Test
+    public void usarExpressaoIn() {
+        Cliente cliente1 = entityManager.find(Cliente.class, 1);
+        Cliente cliente2 = new Cliente();
+        cliente2.setId(1);
+
+        List<Cliente> clientes = Arrays.asList(cliente1, cliente2);
+
+        String jpql = "select p from Pedido p where p.cliente in (:clientes)";
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        typedQuery.setParameter("clientes", clientes);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
     }
 }
