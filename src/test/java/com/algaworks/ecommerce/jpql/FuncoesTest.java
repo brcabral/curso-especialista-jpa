@@ -58,4 +58,16 @@ public class FuncoesTest extends EntityManagerTest {
 
         lista.forEach(size -> System.out.println(size));
     }
+
+    @Test
+    public void aplicarFuncaoNativas() {
+        String jpql = "select function('dayname', p.dataCriacao) from Pedido p " +
+                "where function('acima_media_faturamento', p.total) = 1";
+
+        TypedQuery<String> typedQuery = entityManager.createQuery(jpql, String.class);
+        List<String> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(dayWeek -> System.out.println("Day of week: " + dayWeek));
+    }
 }
