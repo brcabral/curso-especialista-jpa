@@ -105,4 +105,18 @@ public class SubqueriesTest extends EntityManagerTest {
 
         lista.forEach(p -> System.out.println("ID: " + p.getId() + ", total: " + p.getTotal()));
     }
+
+    @Test
+    public void clientesComDoisOuMaisPedidos() {
+        // Todos os clientes que fizeram dois ou mais pedidos
+        String jpql = "select c from Cliente c " +
+                "where (select count(p) from c.pedidos p) >= 2";
+
+        TypedQuery<Cliente> typedQuery = entityManager.createQuery(jpql, Cliente.class);
+
+        List<Cliente> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId() + ", Nome: " + obj.getNome()));
+    }
 }
