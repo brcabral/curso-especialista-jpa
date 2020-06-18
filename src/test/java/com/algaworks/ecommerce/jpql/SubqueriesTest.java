@@ -21,7 +21,7 @@ public class SubqueriesTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
 
-        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome() + ", preço: " + p.getPreco()));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SubqueriesTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
 
-        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome() + ", preço: " + p.getPreco()));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class SubqueriesTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
 
-        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class SubqueriesTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
 
-        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
     }
 
     @Test
@@ -160,6 +160,49 @@ public class SubqueriesTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
 
-        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
+    }
+
+    @Test
+    public void produtosVendidosPeloPrecoAtual() {
+        // Todos os produtos que já foram vendidos, pelo menos, uma vez pelo preço atual.
+        String jpql = "select p from Produto p " +
+                "where p.preco = ANY (select precoProduto from ItemPedido where produto = p)";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
+    }
+
+    @Test
+    public void produtosVendidosPeloPrecoDiferenteDoAtual() {
+        // Todos os produtos que já foram vendidos por um preco diferente do atual
+        String jpql = "select p from Produto p " +
+                "where p.preco <> ANY (select precoProduto from ItemPedido where produto = p)";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
+    }
+
+    @Test
+    public void produtosSempreVendidosPeloMesmoPreco() {
+        // Todos os produtos que sempre foram vendidos pelo mesmo preco
+        String jpql = "select distinct ip.produto from ItemPedido ip " +
+                "where ip.precoProduto = ALL (select ip2.precoProduto from ItemPedido ip2 " +
+                "                             where ip2.produto = ip.produto) ";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
     }
 }
