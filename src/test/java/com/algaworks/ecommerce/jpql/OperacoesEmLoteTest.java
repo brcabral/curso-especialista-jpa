@@ -4,6 +4,7 @@ import com.algaworks.ecommerce.EntityManagerTest;
 import com.algaworks.ecommerce.model.Produto;
 import org.junit.Test;
 
+import javax.persistence.Query;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +48,18 @@ public class OperacoesEmLoteTest extends EntityManagerTest {
                 System.out.println("-------------------");
             }
         }
+        entityManager.getTransaction().commit();
+    }
+
+    @Test
+    public void atualizarEmLote() {
+        entityManager.getTransaction().begin();
+        String jpql = "update Produto p set p.preco = p.preco + (p.preco * 0.1) " +
+                "where exists (select 1 from p.categorias c2 where c2.id = :categoria)";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("categoria", 2);
+        query.executeUpdate();
+
         entityManager.getTransaction().commit();
     }
 }
