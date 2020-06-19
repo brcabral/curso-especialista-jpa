@@ -1,6 +1,7 @@
 package com.algaworks.ecommerce.jpql;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.Produto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,6 +23,30 @@ public class NamedQueryTest extends EntityManagerTest {
         TypedQuery<Produto> typedQuery = entityManager
                 .createNamedQuery("Produto.listarPorCategoria", Produto.class);
         typedQuery.setParameter("categoria", 2);
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void listarPedidosArquivoORM() {
+        TypedQuery<Pedido> typedQuery = entityManager
+                .createNamedQuery("Pedido.listar", Pedido.class);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void listarPedidosArquivoEspecifico() {
+        TypedQuery<Pedido> typedQuery = entityManager
+                .createNamedQuery("Pedido.todos", Pedido.class);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void listarProdutosArquivoEspecifico() {
+        TypedQuery<Produto> typedQuery = entityManager
+                .createNamedQuery("Produto.todos", Produto.class);
         List<Produto> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
     }
