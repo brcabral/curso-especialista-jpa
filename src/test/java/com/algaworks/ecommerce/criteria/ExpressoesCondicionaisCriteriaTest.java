@@ -1,10 +1,7 @@
 package com.algaworks.ecommerce.criteria;
 
 import com.algaworks.ecommerce.EntityManagerTest;
-import com.algaworks.ecommerce.model.Cliente;
-import com.algaworks.ecommerce.model.Cliente_;
-import com.algaworks.ecommerce.model.Produto;
-import com.algaworks.ecommerce.model.Produto_;
+import com.algaworks.ecommerce.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ExpressoesCondicionaisCriteriaTest extends EntityManagerTest {
@@ -68,7 +66,8 @@ public class ExpressoesCondicionaisCriteriaTest extends EntityManagerTest {
         criteriaQuery.select(root);
         criteriaQuery.where(
                 criteriaBuilder.greaterThan(root.get(Produto_.preco), new BigDecimal(799)),
-                criteriaBuilder.lessThan(root.get(Produto_.preco), new BigDecimal(3500)));
+                criteriaBuilder.lessThan(root.get(Produto_.preco), new BigDecimal(3500))
+        );
 
         TypedQuery typedQuery = entityManager.createQuery(criteriaQuery);
         List<Produto> lista = typedQuery.getResultList();
@@ -76,5 +75,20 @@ public class ExpressoesCondicionaisCriteriaTest extends EntityManagerTest {
 
         lista.forEach(p -> System.out.println(
                 "ID: " + p.getId() + ", Nome: " + p.getNome() + ", Preço: " + p.getPreco()));
+    }
+
+    @Test
+    public void usarMaiorMenorComDatas() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.greaterThanOrEqualTo(root
+                .get(Pedido_.dataCriacao), LocalDateTime.now().minusDays(3)));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
     }
 }
