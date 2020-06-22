@@ -91,4 +91,39 @@ public class ExpressoesCondicionaisCriteriaTest extends EntityManagerTest {
         List<Pedido> lista = typedQuery.getResultList();
         Assert.assertFalse(lista.isEmpty());
     }
+
+    @Test
+    public void usarBetween() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.between(root
+                .get(Pedido_.total), new BigDecimal(499), new BigDecimal(2398)));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", Total: " + p.getTotal()));
+    }
+
+    @Test
+    public void usarBetweenComDatas() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.between(root.get(Pedido_.dataCriacao),
+                LocalDateTime.now().minusDays(5).withHour(0).withMinute(0).withSecond(0),
+                LocalDateTime.now()));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", Total: " + p.getTotal()));
+    }
 }
