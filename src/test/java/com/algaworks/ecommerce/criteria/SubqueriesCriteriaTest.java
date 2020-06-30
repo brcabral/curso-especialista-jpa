@@ -139,4 +139,29 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
 
         lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
     }
+
+    @Test
+    public void clientesComMaisDeDoisPedidos() {
+        // Todos os clientes que fizeram mais de dois pedidos
+        // String jpql = "select c from Cliente c " +
+        //         "where (select count(p) from c.pedidos p) > 2";
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
+        Root<Cliente> root = criteriaQuery.from(Cliente.class);
+
+        criteriaQuery.select(root);
+
+        Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+        Root<Pedido> subqueryRoot = subquery.from(Pedido.class);
+        subquery.select(criteriaBuilder.count(subqueryRoot.get(Pedido_.id)));
+        subquery.where(criteriaBuilder.equal(subqueryRoot.get(Pedido_.cliente), root));
+
+        criteriaQuery.where(criteriaBuilder.greaterThan(subquery, 2L));
+
+        TypedQuery<Cliente> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Cliente> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(c -> System.out.println("ID: " + c.getId() + ", Nome: " + c.getNome()));
+    }
 }
