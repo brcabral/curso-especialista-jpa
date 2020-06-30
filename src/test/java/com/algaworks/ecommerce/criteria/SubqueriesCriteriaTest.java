@@ -322,4 +322,32 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
 
         lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
     }
+
+    @Test
+    public void produtosSempreVendidosPeloMesmoPreco() {
+        // Todos os produtos que sempre foram vendidos pelo mesmo preco
+        String jpql = "select distinct ip.produto from ItemPedido ip " +
+                "where ip.precoProduto = ALL (select ip2.precoProduto from ItemPedido ip2 " +
+                "                             where ip2.produto = ip.produto) ";
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produto> criteriaQuery = criteriaBuilder.createQuery(Produto.class);
+        Root<ItemPedido> root = criteriaQuery.from(ItemPedido.class);
+
+        criteriaQuery.select(root.get(ItemPedido_.produto)).distinct(true);
+
+        Subquery<BigDecimal> subquery = criteriaQuery.subquery(BigDecimal.class);
+        Root<ItemPedido> subqueryRoot = subquery.from(ItemPedido.class);
+        subquery.select(subqueryRoot.get(ItemPedido_.precoProduto));
+        subquery.where(criteriaBuilder.equal(
+                subqueryRoot.get(ItemPedido_.produto), root.get(ItemPedido_.produto)));
+
+        criteriaQuery.where(criteriaBuilder.equal(
+                root.get(ItemPedido_.precoProduto), criteriaBuilder.all(subquery)));
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
+    }
 }
