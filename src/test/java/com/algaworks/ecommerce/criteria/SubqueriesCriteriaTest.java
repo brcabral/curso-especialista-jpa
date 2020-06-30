@@ -16,7 +16,6 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
         // Produto(s) mais caro(s) da base
         // String jpql = "select p from Produto p " +
         //        "where p.preco = (select max(preco) from Produto)";
-
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Produto> criteriaQuery = criteriaBuilder.createQuery(Produto.class);
         Root<Produto> root = criteriaQuery.from(Produto.class);
@@ -42,7 +41,6 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
         // Todos os pedidos acima da média de venda
         // String jpql = "select p from Pedido p " +
         //      "where p.total > (select avg(total) from Pedido)";
-
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
@@ -163,5 +161,33 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
         Assert.assertFalse(lista.isEmpty());
 
         lista.forEach(c -> System.out.println("ID: " + c.getId() + ", Nome: " + c.getNome()));
+    }
+
+    @Test
+    public void pesquisarPedidosPorProdutosDaCategoria() {
+        // pesquisar todos os pedidos com produto da categoria 2
+        // String jpql = "select p from Pedido p join p.itensPedido ip " +
+        //        "where ip.produto in (select p2 from Produto p2 join p2.categorias c " +
+        //        "                     where c.id = 2)";
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        Join<Pedido, ItemPedido> joinItensPedido = root.join("itensPedido");
+
+        criteriaQuery.select(root);
+
+        Subquery<Produto> subquery = criteriaQuery.subquery(Produto.class);
+        Root<Produto> subqueryRoot = subquery.from(Produto.class);
+        subquery.select(subqueryRoot);
+        Join<Produto, Categoria> subqueryJoinCategoria = subqueryRoot.join(Produto_.categorias);
+        subquery.where(criteriaBuilder.equal(subqueryJoinCategoria.get(Categoria_.id), 2));
+
+        criteriaQuery.where(joinItensPedido.get(ItemPedido_.produto).in(subquery));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", total: " + p.getTotal()));
     }
 }

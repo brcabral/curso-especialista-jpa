@@ -92,7 +92,7 @@ public class SubqueriesTest extends EntityManagerTest {
     }
 
     @Test
-    public void pesquisarProtudosPorCategoria() {
+    public void pesquisarPedidosPorProdutosDaCategoria() {
         // pesquisar todos os pedidos com produto da categoria 2
         String jpql = "select p from Pedido p join p.itensPedido ip " +
                 "where ip.produto in (select p2 from Produto p2 join p2.categorias c " +
