@@ -36,4 +36,20 @@ public class OperacoesEmLoteCriteriaTest extends EntityManagerTest {
 
         entityManager.getTransaction().commit();
     }
+
+    @Test
+    public void removerEmLote() {
+        entityManager.getTransaction().begin();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Produto> criteriaDelete = criteriaBuilder.createCriteriaDelete(Produto.class);
+        Root<Produto> root = criteriaDelete.from(Produto.class);
+
+        criteriaDelete.where(criteriaBuilder.between(root.get(Produto_.id), 5, 12));
+
+        Query query = entityManager.createQuery(criteriaDelete);
+        query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+    }
 }
