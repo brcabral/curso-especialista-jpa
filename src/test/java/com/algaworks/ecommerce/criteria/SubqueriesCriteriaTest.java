@@ -190,4 +190,29 @@ public class SubqueriesCriteriaTest extends EntityManagerTest {
 
         lista.forEach(p -> System.out.println("ID: " + p.getId() + ", total: " + p.getTotal()));
     }
+
+    @Test
+    public void produtosVendidosPeloPrecoDiferenteDoAtual() {
+        // Todos os produtos que já foram vendidos por um preco diferente do atual
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Produto> criteriaQuery = criteriaBuilder.createQuery(Produto.class);
+        Root<Produto> root = criteriaQuery.from(Produto.class);
+
+        criteriaQuery.select(root);
+
+        Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+        Root<ItemPedido> subqueryRoot = subquery.from(ItemPedido.class);
+        subquery.select(criteriaBuilder.literal(1));
+        subquery.where(criteriaBuilder.equal(subqueryRoot.get(ItemPedido_.produto), root),
+                criteriaBuilder.notEqual(
+                    subqueryRoot.get(ItemPedido_.precoProduto), root.get(Produto_.preco)));
+
+        criteriaQuery.where(criteriaBuilder.exists(subquery));
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Produto> lista = typedQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId() + ", nome: " + p.getNome()));
+    }
 }
