@@ -47,4 +47,20 @@ public class ConsultasNativaTest extends EntityManagerTest {
         lista.stream().forEach(obj -> System.out.println(
                 String.format("Produto => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
     }
+
+    @Test
+    public void executarSQLComParametro() {
+        String sql = "select prd_id id, prd_nome nome, prd_descricao descricao, " +
+                "prd_data_criacao data_criacao, prd_data_ultima_atualizacao data_ultima_atualizacao, " +
+                "prd_preco preco, prd_foto foto " +
+                "from ecm_produto " +
+                "where prd_id = :id";
+
+        Query query = entityManager.createNativeQuery(sql, Produto.class);
+        query.setParameter("id", 201);
+
+        List<Produto> lista = query.getResultList();
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("Produto => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
 }
