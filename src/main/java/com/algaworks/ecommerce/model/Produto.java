@@ -48,6 +48,13 @@ import java.util.List;
                                 })
                 })
 })
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "produto_loja.listar",
+                query = "select id, nome, descricao, data_criacao, data_ultima_atualizacao, preco, foto " +
+                        "from produto_loja", resultClass = Produto.class),
+        @NamedNativeQuery(name = "ecm_produto.listar",
+                query = "select * from ecm_produto", resultSetMapping = "ecm_produto.Produto")
+})
 public class Produto extends EntidadeBaseInteger {
     @Column(length = 100, nullable = false) // nome varchar(100) not null
     private String nome;
