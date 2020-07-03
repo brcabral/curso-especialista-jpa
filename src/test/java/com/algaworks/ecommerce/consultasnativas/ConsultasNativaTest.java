@@ -91,4 +91,15 @@ public class ConsultasNativaTest extends EntityManagerTest {
                         ((ItemPedido) arr[0]).getId().getPedidoId(),
                         ((Produto) arr[1]).getId(), ((Produto) arr[1]).getNome())));
     }
+
+    @Test
+    public void usarFieldResult() {
+        String sql = "select * from ecm_produto";
+
+        Query query = entityManager.createNativeQuery(sql, "ecm_produto.Produto");
+
+        List<Produto> lista = query.getResultList();
+        lista.stream().forEach(obj -> System.out.println(
+                String.format("Produto => ID: %s, Nome: %s", obj.getId(), obj.getNome())));
+    }
 }
