@@ -12,6 +12,11 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "item_pedido")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(name = "item_pedido-produto.ItemPedido-Produto",
+                entities = {@EntityResult(entityClass = ItemPedido.class),
+                        @EntityResult(entityClass = Produto.class)})
+})
 public class ItemPedido {
     @EmbeddedId
     private ItemPedidoId id;

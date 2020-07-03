@@ -23,6 +23,10 @@ import java.util.List;
                         "where exists (select 1 from Categoria c2 join c2.produtos p2 " +
                         "              where p2 = p and c2.id = :categoria)")
 })
+@SqlResultSetMappings({
+        @SqlResultSetMapping(name = "produto_loja.Produto",
+                entities = {@EntityResult(entityClass = Produto.class)})
+})
 public class Produto extends EntidadeBaseInteger {
     @Column(length = 100, nullable = false) // nome varchar(100) not null
     private String nome;
