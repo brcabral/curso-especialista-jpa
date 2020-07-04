@@ -17,6 +17,12 @@ import java.util.Map;
 @SecondaryTable(name = "cliente_detalhe",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "cliente_id"),
         foreignKey = @ForeignKey(name = "fk_cliente_detalhe_cliente"))
+@NamedStoredProcedureQuery(name = "sp_compraram_acima_media", procedureName = "compraram_acima_media",
+        resultClasses = Cliente.class,
+        parameters = {
+                @StoredProcedureParameter(name = "ano", type = Integer.class, mode = ParameterMode.IN)
+        }
+)
 public class Cliente extends EntidadeBaseInteger {
     @Column(length = 100, nullable = false)
     private String nome;

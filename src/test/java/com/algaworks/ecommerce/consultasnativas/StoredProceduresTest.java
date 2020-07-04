@@ -58,4 +58,13 @@ public class StoredProceduresTest extends EntityManagerTest {
 
         Assert.assertEquals(new BigDecimal("878.9"), valorAjustado);
     }
+
+    @Test
+    public void chamarNamedStoredProcedure() {
+        StoredProcedureQuery storedProcedureQuery = entityManager
+                .createNamedStoredProcedureQuery("sp_compraram_acima_media");
+        storedProcedureQuery.setParameter("ano", 2020);
+        List<Cliente> lista = storedProcedureQuery.getResultList();
+        Assert.assertFalse(lista.isEmpty());
+    }
 }
