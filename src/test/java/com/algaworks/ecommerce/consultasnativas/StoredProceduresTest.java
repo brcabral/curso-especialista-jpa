@@ -1,11 +1,13 @@
 package com.algaworks.ecommerce.consultasnativas;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.model.Cliente;
 import org.junit.Assert;
 import org.junit.Test;
 
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import java.util.List;
 
 public class StoredProceduresTest extends EntityManagerTest {
     @Test
@@ -20,5 +22,17 @@ public class StoredProceduresTest extends EntityManagerTest {
         String nome = (String) storedProcedureQuery.getOutputParameterValue("produto_nome");
 
         Assert.assertEquals("Kindle", nome);
+    }
+
+    @Test
+    public void receberListaDaProcedure() {
+        StoredProcedureQuery storedProcedureQuery = entityManager
+                .createStoredProcedureQuery("compraram_acima_media", Cliente.class);
+        storedProcedureQuery.registerStoredProcedureParameter(
+                "ano", Integer.class, ParameterMode.IN);
+        storedProcedureQuery.setParameter("ano", 2020);
+
+        List<Cliente> lista = storedProcedureQuery.getResultList();
+        Assert.assertNotNull(lista.isEmpty());
     }
 }
