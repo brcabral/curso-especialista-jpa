@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class StoredProceduresTest extends EntityManagerTest {
@@ -34,5 +35,27 @@ public class StoredProceduresTest extends EntityManagerTest {
 
         List<Cliente> lista = storedProcedureQuery.getResultList();
         Assert.assertNotNull(lista.isEmpty());
+    }
+
+    @Test
+    public void atualizarPrecoProduto() {
+        StoredProcedureQuery storedProcedureQuery = entityManager
+                .createStoredProcedureQuery("ajustar_preco_produto", Cliente.class);
+
+        storedProcedureQuery.registerStoredProcedureParameter(
+                "produto_id", Integer.class, ParameterMode.IN);
+        storedProcedureQuery.registerStoredProcedureParameter(
+                "percentual_ajuste", BigDecimal.class, ParameterMode.IN);
+
+        storedProcedureQuery.registerStoredProcedureParameter(
+                "preco_ajustado", BigDecimal.class, ParameterMode.OUT);
+
+        storedProcedureQuery.setParameter("produto_id", 1);
+        storedProcedureQuery.setParameter("percentual_ajuste", new BigDecimal("0.1"));
+
+        BigDecimal valorAjustado = (BigDecimal) storedProcedureQuery
+                .getOutputParameterValue("preco_ajustado");
+
+        Assert.assertEquals(new BigDecimal("878.9"), valorAjustado);
     }
 }
