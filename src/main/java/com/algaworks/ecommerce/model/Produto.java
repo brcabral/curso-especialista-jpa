@@ -2,6 +2,7 @@ package com.algaworks.ecommerce.model;
 
 import com.algaworks.ecommerce.dto.ProdutoDTO;
 import com.algaworks.ecommerce.listener.GenericoListener;
+import com.algaworks.ecommerce.model.converter.BooleanToSimNaoConverter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -105,4 +106,9 @@ public class Produto extends EntidadeBaseInteger {
             joinColumns = @JoinColumn(name = "produto_id", nullable = false),
             foreignKey = @ForeignKey(name = "fk_produto_atributo"))
     private List<Atributo> atributos;
+
+    @NotNull
+    @Convert(converter = BooleanToSimNaoConverter.class)
+    @Column(length = 3, nullable = false)
+    private Boolean ativo = Boolean.FALSE;
 }
