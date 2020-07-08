@@ -21,7 +21,7 @@
             <property name="hibernate.connection.provider_class"
                       value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
 
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="none"/>
 
             <property name="javax.persistence.schema-generation.create-source"
                       value="metadata-then-script"/>
