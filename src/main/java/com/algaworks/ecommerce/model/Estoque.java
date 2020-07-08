@@ -20,5 +20,6 @@ public class Estoque extends EntidadeBaseInteger {
 
     @NotNull
     @PositiveOrZero
+    @Column(nullable = false)
     private Integer quantidade;
 }
