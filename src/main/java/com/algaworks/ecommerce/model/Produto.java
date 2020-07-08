@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,18 +60,23 @@ import java.util.List;
                 query = "select * from ecm_produto", resultSetMapping = "ecm_produto.Produto")
 })
 public class Produto extends EntidadeBaseInteger {
+    @NotBlank
     @Column(length = 100, nullable = false) // nome varchar(100) not null
     private String nome;
 
+    @NotNull
+    @PastOrPresent
     @Column(name = "data_criacao", updatable = false, nullable = false)
     private LocalDateTime dataCriacao;
 
+    @PastOrPresent
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
     @Lob
     private String descricao;
 
+    @Positive
     private BigDecimal preco;
 
     @Lob

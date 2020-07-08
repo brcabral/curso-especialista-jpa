@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,26 +20,34 @@ import java.util.List;
 @Table(name = "pedido")
 @EntityListeners({GerarNotaFiscalListener.class, GenericoListener.class})
 public class Pedido extends EntidadeBaseInteger {
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
 
+    @NotNull
+    @PastOrPresent
     @Column(name = "data_criacao", updatable = false, nullable = false)
     private LocalDateTime dataCriacao;
 
+    @PastOrPresent
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
+    @PastOrPresent
     @Column(name = "data_conclusao")
     private LocalDateTime dataConclusao;
 
     @OneToOne(mappedBy = "pedido")
     private NotaFiscal notaFiscal;
 
+    @NotNull
+    @Positive
     @Column(nullable = false)
     private BigDecimal total;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(length = 30, nullable = false)
     private StatusPedido status;
@@ -46,6 +58,7 @@ public class Pedido extends EntidadeBaseInteger {
     @OneToOne(mappedBy = "pedido")
     private Pagamento pagamento;
 
+    @NotEmpty
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ItemPedido> itensPedido;
 

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.util.Date;
 
 @Getter
@@ -11,6 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "nota_fiscal")
 public class NotaFiscal extends EntidadeBaseInteger {
+    @NotNull
     @MapsId
     @OneToOne(optional = false)
     @JoinColumn(name = "pedido_id", nullable = false,
@@ -19,9 +22,12 @@ public class NotaFiscal extends EntidadeBaseInteger {
     private Pedido pedido;
 
     @Lob
+    @NotNull
     @Column(nullable = false)
     private byte[] xml;
 
+    @NotNull
+    @PastOrPresent
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = " data_emissao", nullable = false)
     private Date dataEmissao;

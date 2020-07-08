@@ -5,29 +5,41 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @Embeddable
 public class EnderecoEntregaPedido {
+    @NotNull
     @Column(length = 9)
+    @Pattern(regexp = "[0-9]{5}-[0-9]{3}")
     private String cep;
 
+    @NotBlank
     @Column(length = 100)
     private String logradouro;
 
+    @NotBlank
     @Column(length = 10)
     private String numero;
 
     @Column(length = 50)
     private String complemento;
 
+    @NotBlank
     @Column(length = 50)
     private String bairro;
 
+    @NotBlank
     @Column(length = 50)
     private String cidade;
 
+    @NotBlank
+    @Size(min = 2, max = 2)
     @Column(length = 2)
     private String estado;
 }
