@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,11 @@ import java.util.Map;
         }
 )
 public class Cliente extends EntidadeBaseInteger {
+    @NotBlank
     @Column(length = 100, nullable = false)
     private String nome;
 
+    @NotBlank
     @Column(length = 100, nullable = false)
     private String cpf;
 
