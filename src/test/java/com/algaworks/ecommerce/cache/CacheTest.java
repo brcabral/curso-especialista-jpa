@@ -33,4 +33,27 @@ public class CacheTest {
         System.out.println("Buscando a partir da instância 2");
         entityManager2.find(Pedido.class, 2);
     }
+
+    @Test
+    public void adicionarPedidosNoCache() {
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+        EntityManager entityManager3 = entityManagerFactory.createEntityManager();
+
+        System.out.println("Buscando a partir da instância 1");
+        entityManager1
+                .createQuery("select p from Pedido p", Pedido.class)
+                .getResultList();
+
+        // O JPA não faz cache de select
+        // Sempre que for executado um select ele irá no BD buscar os dados
+        System.out.println("Buscando a partir da instância 2");
+        entityManager2
+                .createQuery("select p from Pedido p", Pedido.class)
+                .getResultList();
+
+        // O JPA só buscar no cache com o uso do comando find
+        System.out.println("Buscando a partir da instância 3");
+        entityManager3.find(Pedido.class, 2);
+    }
 }
