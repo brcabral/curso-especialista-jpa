@@ -95,4 +95,17 @@ public class CacheTest {
         Assert.assertTrue(cache.contains(Pedido.class, 1));
         Assert.assertTrue(cache.contains(Pedido.class, 2));
     }
+
+    @Test
+    public void analisarOpcoesCache() {
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        Cache cache = entityManagerFactory.getCache();
+
+        System.out.println("Buscando a partir da instância 1");
+        entityManager1
+                .createQuery("select p from Pedido p", Pedido.class)
+                .getResultList();
+
+        Assert.assertTrue(cache.contains(Pedido.class, 1));
+    }
 }
