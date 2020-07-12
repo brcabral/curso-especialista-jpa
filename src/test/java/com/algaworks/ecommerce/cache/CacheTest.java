@@ -2,6 +2,7 @@ package com.algaworks.ecommerce.cache;
 
 import com.algaworks.ecommerce.model.Pedido;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -79,5 +80,19 @@ public class CacheTest {
 
         System.out.println("Buscando o pedido 2 a partir da instância 2");
         entityManager2.find(Pedido.class, 2);
+    }
+
+    @Test
+    public void verificarSeEstaNoCache() {
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        Cache cache = entityManagerFactory.getCache();
+
+        System.out.println("Buscando a partir da instância 1");
+        entityManager1
+                .createQuery("select p from Pedido p", Pedido.class)
+                .getResultList();
+
+        Assert.assertTrue(cache.contains(Pedido.class, 1));
+        Assert.assertTrue(cache.contains(Pedido.class, 2));
     }
 }
