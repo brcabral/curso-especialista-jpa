@@ -20,6 +20,9 @@ import java.math.BigDecimal;
                         @EntityResult(entityClass = Produto.class)})
 })
 public class ItemPedido {
+    @Version
+    private Integer versao;
+
     @EmbeddedId
     private ItemPedidoId id;
 
