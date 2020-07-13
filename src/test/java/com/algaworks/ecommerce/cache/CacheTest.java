@@ -1,6 +1,7 @@
 package com.algaworks.ecommerce.cache;
 
 import com.algaworks.ecommerce.model.Pedido;
+import com.algaworks.ecommerce.model.Produto;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -21,6 +22,18 @@ public class CacheTest {
     @AfterClass
     public static void tearDownAfterClass() {
         entityManagerFactory.close();
+    }
+
+    private static void esperar(int segundos) {
+        try {
+            Thread.sleep(segundos * 1000);
+        } catch (InterruptedException e) {
+            //
+        }
+    }
+
+    private static void log(Object obj) {
+        System.out.println("[LOG " + System.currentTimeMillis() + "] " + obj);
     }
 
     @Test
@@ -139,5 +152,50 @@ public class CacheTest {
                 // .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
                 .getResultList();
 
+    }
+
+    @Test
+    public void ehcache() {
+        Cache cache = entityManagerFactory.getCache();
+
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+
+        log("Buscando e incluindo no cache...");
+        entityManager1
+                .createQuery("select p from Produto p", Produto.class)
+                .getResultList();
+        log("---");
+
+        esperar(2);
+        Assert.assertTrue(cache.contains(Produto.class, 1));
+        entityManager2.find(Produto.class, 1);
+
+        esperar(2);
+        Assert.assertFalse(cache.contains(Produto.class, 1));
+    }
+
+    @Test
+    public void ehcachePorEntidade() {
+        Cache cache = entityManagerFactory.getCache();
+
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+
+        log("Buscando e incluindo no cache...");
+        entityManager1
+                .createQuery("select p from Pedido p", Pedido.class)
+                .getResultList();
+        log("---");
+
+        esperar(2);
+        Assert.assertTrue(cache.contains(Pedido.class, 2));
+        entityManager2.find(Pedido.class, 2);
+
+        esperar(2);
+        Assert.assertTrue(cache.contains(Pedido.class, 2));
+
+        esperar(4);
+        Assert.assertFalse(cache.contains(Pedido.class, 2));
     }
 }
