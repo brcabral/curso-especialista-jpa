@@ -6,10 +6,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.persistence.Cache;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CacheTest {
     protected static EntityManagerFactory entityManagerFactory;
@@ -107,5 +106,38 @@ public class CacheTest {
                 .getResultList();
 
         Assert.assertTrue(cache.contains(Pedido.class, 1));
+    }
+
+    @Test
+    public void controlarCacheDinamicamente() {
+        // Configura a forma como o cache de segundo nível irá funcionar
+        // javax.persistence.cache.storeMode CacheStoreMode
+
+        // Configura se o cache de segundo nível será ou não usado.
+        // javax.persistence.cache.retrieveMode CacheRetrieveMode
+        Cache cache = entityManagerFactory.getCache();
+
+        System.out.println("Buscando todos os pedidos.................");
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        entityManager1.setProperty("javax.persistence.cache.storeMode", CacheStoreMode.BYPASS);
+        entityManager1
+                .createQuery("select p from Pedido p", Pedido.class)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.USE)
+                .getResultList();
+
+        System.out.println("Buscdando o pedido de ID igual a 2.................");
+        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("javax.persistence.cache.storeMode", CacheStoreMode.BYPASS);
+        // properties.put("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+        entityManager2.find(Pedido.class, 2, properties);
+
+        System.out.println("Buscando a partir da instância 1");
+        EntityManager entityManager3 = entityManagerFactory.createEntityManager();
+        entityManager3
+                .createQuery("select p from Pedido p", Pedido.class)
+                // .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
+                .getResultList();
+
     }
 }
