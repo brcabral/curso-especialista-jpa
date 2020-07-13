@@ -46,6 +46,9 @@ public class CacheTest {
 
         System.out.println("Buscando a partir da instância 2");
         entityManager2.find(Pedido.class, 2);
+
+        entityManager1.close();
+        entityManager2.close();
     }
 
     @Test
@@ -69,6 +72,11 @@ public class CacheTest {
         // O JPA só buscar no cache com o uso do comando find
         System.out.println("Buscando a partir da instância 3");
         entityManager3.find(Pedido.class, 2);
+
+        entityManager1.close();
+        entityManager2.close();
+        entityManager3.close();
+
     }
 
     @Test
@@ -92,6 +100,9 @@ public class CacheTest {
 
         System.out.println("Buscando o pedido 2 a partir da instância 2");
         entityManager2.find(Pedido.class, 2);
+
+        entityManager1.close();
+        entityManager2.close();
     }
 
     @Test
@@ -106,6 +117,8 @@ public class CacheTest {
 
         Assert.assertTrue(cache.contains(Pedido.class, 1));
         Assert.assertTrue(cache.contains(Pedido.class, 2));
+
+        entityManager1.close();
     }
 
     @Test
@@ -119,6 +132,8 @@ public class CacheTest {
                 .getResultList();
 
         Assert.assertTrue(cache.contains(Pedido.class, 1));
+
+        entityManager1.close();
     }
 
     @Test
@@ -152,6 +167,9 @@ public class CacheTest {
                 // .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
                 .getResultList();
 
+        entityManager1.close();
+        entityManager2.close();
+        entityManager3.close();
     }
 
     @Test
@@ -173,6 +191,9 @@ public class CacheTest {
 
         esperar(2);
         Assert.assertFalse(cache.contains(Produto.class, 1));
+
+        entityManager1.close();
+        entityManager2.close();
     }
 
     @Test
@@ -197,5 +218,8 @@ public class CacheTest {
 
         esperar(4);
         Assert.assertFalse(cache.contains(Pedido.class, 2));
+
+        entityManager1.close();
+        entityManager2.close();
     }
 }
