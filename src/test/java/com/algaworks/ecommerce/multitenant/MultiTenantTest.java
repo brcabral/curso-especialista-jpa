@@ -23,4 +23,19 @@ public class MultiTenantTest extends EntityManagerFactoryTest {
         Assert.assertEquals("Kindle Paperwhite", produto2.getNome());
         entityManager2.close();
     }
+
+    @Test
+    public void usarAbordagemPorMaquina() {
+        EcmCurrentTenantIdentifierResolver.setTenantIdentifier("ecommerce_jpa");
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+        Produto produto1 = entityManager1.find(Produto.class, 1);
+        Assert.assertEquals("Kindle", produto1.getNome());
+        entityManager1.close();
+
+        EcmCurrentTenantIdentifierResolver.setTenantIdentifier("ecommerce_multitenancy");
+        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+        Produto produto2 = entityManager2.find(Produto.class, 1);
+        Assert.assertEquals("Kindle Paperwhite", produto2.getNome());
+        entityManager2.close();
+    }
 }

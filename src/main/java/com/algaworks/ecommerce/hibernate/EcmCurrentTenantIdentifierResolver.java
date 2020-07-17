@@ -3,7 +3,7 @@ package com.algaworks.ecommerce.hibernate;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 
 public class EcmCurrentTenantIdentifierResolver implements CurrentTenantIdentifierResolver {
-    private static ThreadLocal<String> tl = new ThreadLocal<>();
+    private static final ThreadLocal<String> tl = new ThreadLocal<>();
 
     public static void setTenantIdentifier(String tenantId) {
         tl.set(tenantId);
