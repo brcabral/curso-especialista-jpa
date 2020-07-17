@@ -14,10 +14,10 @@
 
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:postgresql://192.168.42.54/ecommerce_jpa"/>
+                      value="jdbc:mysql://192.168.42.33/ecommerce_jpa?createDatabaseIfNotExist=true"/>
             <property name="javax.persistence.jdbc.user" value="developer"/>
             <property name="javax.persistence.jdbc.password" value="dev123"/>
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
             <property name="javax.persistence.schema-generation.database.action" value="none"/>
 
@@ -41,7 +41,7 @@
             <property name="javax.persistence.schema-generation.scripts.drop-target"
                       value="/tmp/script/script-remocao-exportado.sql"/>
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 
             <property name="hibernate.multiTenancy" value="NONE"/>
             <property name="hibernate.tenant_identifier_resolver"

@@ -16,6 +16,6 @@ public class EntidadeBaseInteger {
 
     @Id
     @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 }
