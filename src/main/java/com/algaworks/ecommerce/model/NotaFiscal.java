@@ -12,13 +12,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "nota_fiscal")
-public class NotaFiscal {
-    @Id
-    private Integer id;
-
-    @Version
-    private Integer versao;
-
+public class NotaFiscal extends EntidadeBaseInteger {
     @NotNull
     @MapsId
     @OneToOne(optional = false)

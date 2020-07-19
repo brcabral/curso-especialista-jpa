@@ -12,13 +12,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "pagamento")
 @DiscriminatorColumn(name = "tipo_pagamento", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Pagamento {
-    @Id
-    private Integer id;
-
-    @Version
-    private Integer versao;
-
+public abstract class Pagamento extends EntidadeBaseInteger {
     @NotNull
     @MapsId
     @OneToOne(optional = false)

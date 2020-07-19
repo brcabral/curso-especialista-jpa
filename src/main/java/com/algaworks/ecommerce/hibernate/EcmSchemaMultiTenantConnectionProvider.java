@@ -1,4 +1,3 @@
-/*
 package com.algaworks.ecommerce.hibernate;
 
 import org.hibernate.HibernateException;
@@ -77,4 +76,3 @@ public class EcmSchemaMultiTenantConnectionProvider implements
         connectionProvider = cp;
     }
 }
-*/

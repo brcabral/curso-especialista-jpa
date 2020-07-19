@@ -8,7 +8,7 @@
         <mapping-file>META-INF/consultas/produto.xml</mapping-file>
         <mapping-file>META-INF/consultas/categoria.xml</mapping-file>
 
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <shared-cache-mode>ALL</shared-cache-mode>
 
         <validation-mode>CALLBACK</validation-mode>
 
@@ -41,9 +41,6 @@
             <property name="javax.persistence.schema-generation.scripts.drop-target"
                       value="/tmp/script/script-remocao-exportado.sql"/>
 
-            <property name="eclipselink.logging.level" value="FINE"/>
-
-            <!--
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 
             <property name="hibernate.multiTenancy" value="NONE"/>
@@ -64,7 +61,6 @@
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="false"/>
-            -->
         </properties>
     </persistence-unit>
 </persistence>
