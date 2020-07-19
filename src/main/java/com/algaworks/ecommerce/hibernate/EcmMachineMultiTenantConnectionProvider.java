@@ -1,3 +1,4 @@
+/*
 package com.algaworks.ecommerce.hibernate;
 
 import org.hibernate.engine.config.spi.ConfigurationService;
@@ -109,3 +110,4 @@ public class EcmMachineMultiTenantConnectionProvider implements
                 .values().iterator().next();
     }
 }
+*/
