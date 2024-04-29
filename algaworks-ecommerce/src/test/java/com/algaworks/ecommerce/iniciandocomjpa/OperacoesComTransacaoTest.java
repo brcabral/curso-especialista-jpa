@@ -148,6 +148,27 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
     }
 
     @Test
+    public void imepdirOperacaoComBancoDeDados() {
+        Produto produto = entityManager.find(Produto.class, 1);
+
+
+        /**
+         * Desanexa um objeto que está na memória do Entity Manager
+         * O entity manager deixa de gerenciar a instância
+         * */
+        entityManager.detach(produto);
+
+        entityManager.getTransaction().begin();
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 1);
+        Assertions.assertEquals("Kindle", produtoVerificacao.getNome());
+    }
+
+    @Test
     public void abrirEFecharATransacao() {
         Produto produto = new Produto();  //  Somente para os métodos abaixo não ficarem dando erro
 
