@@ -21,10 +21,24 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         entityManager.persist(produto);
         entityManager.getTransaction().commit();
 
-        entityManager.clear();
+        // entityManager.clear();  -> Não é necessário para a operação de remoção
 
         Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assertions.assertNotNull(produtoVerificacao);
+    }
+
+    @Test
+    public void removerObjeto() {
+        Produto produto = entityManager.find(Produto.class, 3);
+
+        entityManager.getTransaction().begin();
+        entityManager.remove(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 3);
+        Assertions.assertNull(produtoVerificacao);
     }
 
     @Test
