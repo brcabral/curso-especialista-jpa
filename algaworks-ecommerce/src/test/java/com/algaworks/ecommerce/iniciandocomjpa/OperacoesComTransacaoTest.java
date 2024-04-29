@@ -21,7 +21,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         entityManager.persist(produto);
         entityManager.getTransaction().commit();
 
-        // entityManager.clear();  -> Não é necessário para a operação de remoção
+        entityManager.clear();
 
         Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assertions.assertNotNull(produtoVerificacao);
@@ -35,7 +35,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         entityManager.remove(produto);
         entityManager.getTransaction().commit();
 
-        entityManager.clear();
+        // entityManager.clear();  -> Não é necessário para a operação de remoção
 
         Produto produtoVerificacao = entityManager.find(Produto.class, 3);
         Assertions.assertNull(produtoVerificacao);
@@ -81,6 +81,25 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
 
         Produto produtoVerificacao = entityManager.find(Produto.class, 1);
         Assertions.assertEquals("Kindle Paperwhite 2ª Geração", produtoVerificacao.getNome());
+    }
+
+    @Test
+    public void inserirObjetoComMerge() {
+        Produto produto = new Produto();
+
+        produto.setId(4);
+        produto.setNome("Microfone Rode Videmic");
+        produto.setDescricao("A melhor qualidade de som.");
+        produto.setPreco(new BigDecimal(1000));
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
+        Assertions.assertNotNull(produtoVerificacao);
     }
 
     @Test
