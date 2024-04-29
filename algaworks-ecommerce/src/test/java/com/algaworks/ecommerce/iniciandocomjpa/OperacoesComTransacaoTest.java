@@ -42,6 +42,30 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
     }
 
     @Test
+    public void atualizarObjeto() {
+        /**
+         * Quando o objeto vem de qualquer fonte que não seja o JPA
+         * é preciso preencher todos os atritubos do objeto antes de executar o merge, se não,
+         * ao fazer o merge os valores não preenchidos serão atualizados para null no banco de dados.
+         */
+        Produto produto = new Produto();
+        produto.setId(1);
+        produto.setNome("Kindle Paperwhite");
+        produto.setDescricao("Conheça o novo Kindle.");
+        produto.setPreco(new BigDecimal(599));
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 1);
+        Assertions.assertNotNull(produtoVerificacao);
+        Assertions.assertEquals("Kindle Paperwhite", produtoVerificacao.getNome());
+    }
+
+    @Test
     public void abrirEFecharATransacao() {
         Produto produto = new Produto();  //  Somente para os métodos abaixo não ficarem dando erro
 
