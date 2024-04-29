@@ -66,6 +66,24 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
     }
 
     @Test
+    public void atualizarObjetoGerenciado() {
+        Produto produto = entityManager.find(Produto.class, 1);
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+
+        /**
+         * Ao fazer uma atualização de um objeto gerenciado na memória do entity manager
+         * não é necessário usar o comando merge explícito.
+         * */
+        entityManager.getTransaction().begin();
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 1);
+        Assertions.assertEquals("Kindle Paperwhite 2ª Geração", produtoVerificacao.getNome());
+    }
+
+    @Test
     public void abrirEFecharATransacao() {
         Produto produto = new Produto();  //  Somente para os métodos abaixo não ficarem dando erro
 
