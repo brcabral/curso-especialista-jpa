@@ -20,9 +20,22 @@ public class Cliente {
 
     private String nome;
 
+    @Transient
+    private String primeiroNome;
+
     @Enumerated(EnumType.STRING)
     private SexoCliente sexo;
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
+
+    @PostLoad
+    public void configurarPrimeiroNome() {
+        if (nome != null && !nome.isBlank()) {
+            int index = nome.indexOf(" ");
+            if (index > -1) {
+                primeiroNome = nome.substring(0, index);
+            }
+        }
+    }
 }
