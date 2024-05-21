@@ -34,6 +34,10 @@ public class Produto {
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
+    @Lob
+    @Column(length = 1000)
+    private byte[] foto;
+
     @ManyToMany
     @JoinTable(name = "produto_categoria",
             joinColumns = @JoinColumn(name = "produto_id"),
