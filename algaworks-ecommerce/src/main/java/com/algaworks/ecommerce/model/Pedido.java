@@ -13,16 +13,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "pedido")
 @EntityListeners({GerarNotaFiscalListener.class, GenericoListener.class})
-public class Pedido {
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+public class Pedido extends EntidadeBaseInteger {
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
