@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue("boleto")
+@Table(name = "boleto")
 public class PagamentoBoleto extends Pagamento {
     @Column(name = "codigo_barras")
     private String codigoBarras;

@@ -7,10 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "pagamento")
-@DiscriminatorColumn(name = "tipo_pagamento",
-        discriminatorType = DiscriminatorType.STRING)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pagamento extends EntidadeBaseInteger {
     @MapsId
     @OneToOne(optional = false)
