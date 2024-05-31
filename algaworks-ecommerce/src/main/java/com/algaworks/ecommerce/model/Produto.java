@@ -13,7 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "produto")
+@Table(name = "produto",
+        uniqueConstraints = {@UniqueConstraint(name = "unq_nome", columnNames = "nome")},
+        indexes = {@Index(name = "idx_nome", columnList = "nome")})
 @EntityListeners({GenericoListener.class})
 public class Produto extends EntidadeBaseInteger {
     private String nome;
