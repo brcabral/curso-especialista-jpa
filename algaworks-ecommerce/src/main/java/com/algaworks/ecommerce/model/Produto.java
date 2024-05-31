@@ -2,7 +2,6 @@ package com.algaworks.ecommerce.model;
 
 import com.algaworks.ecommerce.listener.GenericoListener;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +17,13 @@ import java.util.List;
         indexes = {@Index(name = "idx_nome", columnList = "nome")})
 @EntityListeners({GenericoListener.class})
 public class Produto extends EntidadeBaseInteger {
+    @Column(length = 100, nullable = false)  // nome varchar(100) not null
     private String nome;
 
+    @Column(columnDefinition = "varchar(275) not null default 'descricao'")
     private String descricao;
 
+    @Column(precision = 10, scale = 2)  // preco decimal(10, 2)
     private BigDecimal preco;
 
     @Column(name = "data_criacao", updatable = false)

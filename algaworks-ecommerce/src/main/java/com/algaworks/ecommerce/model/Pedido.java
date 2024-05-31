@@ -3,7 +3,6 @@ package com.algaworks.ecommerce.model;
 import com.algaworks.ecommerce.listener.GenericoListener;
 import com.algaworks.ecommerce.listener.GerarNotaFiscalListener;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,8 +29,10 @@ public class Pedido extends EntidadeBaseInteger {
     @Column(name = "data_conclusao")
     private LocalDateTime dataConclusao;
 
+    @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal total;
 
+    @Column(length = 30, nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusPedido status;
 
