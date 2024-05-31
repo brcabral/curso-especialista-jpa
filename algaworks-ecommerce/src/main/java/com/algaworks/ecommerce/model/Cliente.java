@@ -13,12 +13,16 @@ import java.util.Map;
 @Setter
 @SecondaryTable(name = "cliente_detalhe", pkJoinColumns = @PrimaryKeyJoinColumn(name = "cliente_id"))
 @Entity
-@Table(name = "cliente")
+@Table(name = "cliente",
+        uniqueConstraints = {@UniqueConstraint(name = "unq_cpf", columnNames = "cpf")},
+        indexes = {@Index(name = "idx_name", columnList = "nome")})
 public class Cliente extends EntidadeBaseInteger {
     private String nome;
 
     @Transient
     private String primeiroNome;
+
+    private String cpf;
 
     @Column(table = "cliente_detalhe")
     @Enumerated(EnumType.STRING)
