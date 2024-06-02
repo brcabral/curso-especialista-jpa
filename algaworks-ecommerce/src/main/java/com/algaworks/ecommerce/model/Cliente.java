@@ -17,11 +17,13 @@ import java.util.Map;
         uniqueConstraints = {@UniqueConstraint(name = "unq_cpf", columnNames = "cpf")},
         indexes = {@Index(name = "idx_name", columnList = "nome")})
 public class Cliente extends EntidadeBaseInteger {
+    @Column(length = 100, nullable = false)
     private String nome;
 
     @Transient
     private String primeiroNome;
 
+    @Column(length = 14, nullable = false)
     private String cpf;
 
     @Column(table = "cliente_detalhe")
