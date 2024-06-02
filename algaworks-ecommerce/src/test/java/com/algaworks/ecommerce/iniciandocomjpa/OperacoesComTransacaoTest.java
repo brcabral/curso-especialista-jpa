@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class OperacoesComTransacaoTest extends EntityManagerTest {
     @Test
@@ -15,6 +16,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         produto.setNome("Câmera Canon");
         produto.setDescricao("A melhor definição para suas fotos.");
         produto.setPreco(new BigDecimal(5000));
+        produto.setDataCriacao(LocalDateTime.now());
 
         entityManager.getTransaction().begin();
         entityManager.persist(produto);
@@ -89,6 +91,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         produto.setNome("Microfone Rode Videmic");
         produto.setDescricao("A melhor qualidade de som.");
         produto.setPreco(new BigDecimal(1000));
+        produto.setDataCriacao(LocalDateTime.now());
 
         entityManager.getTransaction().begin();
         Produto produtoSalvo = entityManager.merge(produto);
@@ -107,6 +110,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         produtoPersist.setNome("Smartphone One Plus");
         produtoPersist.setDescricao("O processador mais rápido.");
         produtoPersist.setPreco(new BigDecimal(2000));
+        produtoPersist.setDataCriacao(LocalDateTime.now());
 
         /**
          * Apenas persiste (inserir) um objeto no banco
@@ -127,6 +131,7 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
         produtoMerge.setNome("Notebook Dell");
         produtoMerge.setDescricao("O melhor da categoria.");
         produtoMerge.setPreco(new BigDecimal(2000));
+        produtoMerge.setDataCriacao(LocalDateTime.now());
 
         /**
          * Pode ser usado para persistir ou atualizar um objeto no banco
@@ -147,7 +152,6 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
     public void imepdirOperacaoComBancoDeDados() {
         Produto produto = entityManager.find(Produto.class, 1);
 
-
         /**
          * Desanexa um objeto que está na memória do Entity Manager
          * O entity manager deixa de gerenciar a instância
@@ -160,19 +164,19 @@ public class OperacoesComTransacaoTest extends EntityManagerTest {
 
         entityManager.clear();
 
-        Produto produtoVerificacao = entityManager.find(Produto.class, 1);
+        Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assertions.assertEquals("Kindle", produtoVerificacao.getNome());
     }
 
     @Test
     public void abrirEFecharATransacao() {
-        Produto produto = new Produto();  //  Somente para os métodos abaixo não ficarem dando erro
+        // Produto produto = new Produto();  //  Somente para os métodos abaixo não ficarem dando erro
 
         entityManager.getTransaction().begin();
 
-        entityManager.persist(produto);
-        entityManager.merge(produto);
-        entityManager.remove(produto);
+        // entityManager.persist(produto);
+        // entityManager.merge(produto);
+        // entityManager.remove(produto);
 
         entityManager.getTransaction().rollback();
     }
