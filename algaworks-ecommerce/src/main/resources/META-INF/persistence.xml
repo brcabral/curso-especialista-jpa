@@ -11,7 +11,8 @@
             <property name="javax.persistence.jdbc.password" value="dev123"/>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
 
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.database.action"
+                      value="drop-and-create"/>
 
             <property name="jakarta.persistence.schema-generation.create-source"
                       value="metadata-then-script"/>
@@ -25,6 +26,13 @@
 
             <property name="javax.persistence.sql-load-script-source"
                       value="META-INF/banco-de-dados/dados-iniciais.sql"/>
+
+            <property name="jakarta.persistence.schema-generation.scripts.action"
+                      value="none"/>
+            <property name="jakarta.persistence.schema-generation.scripts.create-target"
+                      value="/tmp/scripts/script-criacao-exportado.sql"/>
+            <property name="jakarta.persistence.schema-generation.scripts.drop-target"
+                      value="/tmp/scripts/script-remocao-exportado.sql"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
 
