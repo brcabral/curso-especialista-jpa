@@ -57,8 +57,11 @@ public class Pedido extends EntidadeBaseInteger {
     // @PreUpdate
     public void calcularTotal() {
         if (itens != null) {
-            total = itens.stream().map(ItemPedido::getPrecoProduto)
+            total = itens.stream().map(
+                            i -> new BigDecimal(i.getQuantidade()).multiply(i.getPrecoProduto()))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            total = BigDecimal.ZERO;
         }
     }
 
