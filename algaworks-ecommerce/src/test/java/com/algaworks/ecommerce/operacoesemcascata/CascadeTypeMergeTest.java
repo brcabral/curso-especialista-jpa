@@ -4,6 +4,8 @@ import com.algaworks.ecommerce.EntityManagerTest;
 import com.algaworks.ecommerce.model.*;
 import org.junit.jupiter.api.Assertions;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class CascadeTypeMergeTest extends EntityManagerTest {
@@ -67,5 +69,30 @@ public class CascadeTypeMergeTest extends EntityManagerTest {
 
         ItemPedido itemPedidoVerificacao = entityManager.find(ItemPedido.class, itemPedido.getId());
         Assertions.assertTrue(StatusPedido.PAGO.equals(itemPedidoVerificacao.getPedido().getStatus()));
+    }
+
+    // @Test
+    public void atualizarProdutoComCategoria() {
+        Produto produto = new Produto();
+        produto.setId(1);
+        produto.setDataUltimaAtualizacao(LocalDateTime.now());
+        produto.setPreco(new BigDecimal(500));
+        produto.setNome("Kindle");
+        produto.setDescricao("Agora com iluminação embutida ajustável.");
+
+        Categoria categoria = new Categoria();
+        categoria.setId(2);
+        categoria.setNome("Tablets");
+
+        produto.setCategorias(Arrays.asList(categoria));  // CascadeType.MERGE
+
+        entityManager.getTransaction().begin();
+        entityManager.merge(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Categoria categoriaVerificacao = entityManager.find(Categoria.class, categoria.getId());
+        Assertions.assertEquals("Tablets", categoriaVerificacao.getNome());
     }
 }
