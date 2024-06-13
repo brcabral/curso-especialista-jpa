@@ -8,6 +8,7 @@ import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class BasicoJPQLTest extends EntityManagerTest {
@@ -57,5 +58,16 @@ public class BasicoJPQLTest extends EntityManagerTest {
         TypedQuery<Cliente> typedQueryCliente = entityManager.createQuery(jpqlCliente, Cliente.class);
         List<Cliente> listaClientes = typedQueryCliente.getResultList();
         Assertions.assertTrue(Cliente.class.equals(listaClientes.get(0).getClass()));
+    }
+
+    @Test
+    public void projetarOResultado() {
+        // Projetar significa buscar dois ou mais atributos de uma mesma entidade
+        String jpql = "select id, nome from Produto";
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+        List<Object[]> lista = typedQuery.getResultList();
+
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+        Assertions.assertTrue(lista.get(0).length == 2);
     }
 }
