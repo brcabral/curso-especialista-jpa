@@ -93,4 +93,14 @@ public class ExpressoesCondicionaisTest extends EntityManagerTest {
         List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
+
+    @Test
+    public void usarExpressaoDiferente() {
+        String jpql = "select p from Pedido p where p.id <> 1";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
 }
