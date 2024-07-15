@@ -48,7 +48,7 @@ public class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     public void usarMaiorMenor() {
-        String jpql = "select p from Produto p where p.preco >= :precoInicial and preco <= :precoFinal ";
+        String jpql = "select p from Produto p where p.preco >= :precoInicial and p.preco <= :precoFinal ";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
         typedQuery.setParameter("precoInicial", new BigDecimal(400));
@@ -64,6 +64,31 @@ public class ExpressoesCondicionaisTest extends EntityManagerTest {
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
         typedQuery.setParameter("data", LocalDateTime.now().minusDays(2));
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void usarBetween() {
+        // Between -> maior ou igual e menos ou igual
+        String jpql = "select p from Produto p where p.preco between :precoInicial and :precoFinal ";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+        typedQuery.setParameter("precoInicial", new BigDecimal(499));
+        typedQuery.setParameter("precoFinal", new BigDecimal(1400));
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    public void usarBetweenComDatas() {
+        String jpql = "select p from Pedido p where p.dataCriacao between :dataInicial and :dataFinal";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        typedQuery.setParameter("dataInicial", LocalDateTime.now().minusDays(10));
+        typedQuery.setParameter("dataFinal", LocalDateTime.now());
 
         List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
