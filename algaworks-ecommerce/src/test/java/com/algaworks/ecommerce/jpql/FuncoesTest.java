@@ -71,4 +71,15 @@ public class FuncoesTest extends EntityManagerTest {
 
         lista.forEach(arr -> System.out.println(arr[0] + " | " + arr[1] + " | " + arr[2]));
     }
+
+    @Test
+    public void aplicarFuncaoColecao() {
+        String jpql = "select size(p.itens) from Pedido p where size(p.itens) > 1";
+
+        TypedQuery<Integer> typedQuery = entityManager.createQuery(jpql, Integer.class);
+        List<Integer> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(size -> System.out.println(size));
+    }
 }
