@@ -103,4 +103,16 @@ public class FuncoesTest extends EntityManagerTest {
 
         lista.forEach(dayWeek -> System.out.println("Day of week: " + dayWeek));
     }
+
+    @Test
+    public void aplicarFuncaoAgregacao() {
+        // avg, count, min, max, sum
+        String jpql = "select sum(p.total) from Pedido p";
+
+        TypedQuery<Number> typedQuery = entityManager.createQuery(jpql, Number.class);
+        List<Number> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(result -> System.out.println("Result: " + result));
+    }
 }
