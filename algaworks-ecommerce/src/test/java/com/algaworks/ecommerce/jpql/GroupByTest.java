@@ -74,4 +74,19 @@ public class GroupByTest extends EntityManagerTest {
 
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1] + ": " + arr[2]));
     }
+
+    @Test
+    public void condicionarAgrupamentoComHaving() {
+        String jpql = "select cat.nome, sum(ip.precoProduto) " +
+                "from ItemPedido ip " +
+                "join ip.produto pro " +
+                "join pro.categorias cat " +
+                "group by cat.id " +
+                "having sum(ip.precoProduto) > 1500";
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+        List<Object[]> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
 }
