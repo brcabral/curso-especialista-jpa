@@ -8,9 +8,11 @@ import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExpressoesCondicionaisTest extends EntityManagerTest {
@@ -135,5 +137,19 @@ public class ExpressoesCondicionaisTest extends EntityManagerTest {
         List<Object[]> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
+
+    @Test
+    public void usarExpressaoIN() {
+        Cliente cliente1 = entityManager.find(Cliente.class, 1);
+        Cliente cliente2 = entityManager.find(Cliente.class, 2);
+
+        List<Cliente> clientes = Arrays.asList(cliente1, cliente2);
+        String jpql = "select p from Pedido p where p.cliente in (:clientes)";
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        typedQuery.setParameter("clientes", clientes);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
     }
 }
