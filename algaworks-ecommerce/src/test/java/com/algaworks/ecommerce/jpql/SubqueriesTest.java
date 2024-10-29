@@ -88,6 +88,7 @@ public class SubqueriesTest extends EntityManagerTest {
 
     @Test
     public void pesquisarProtudosPorCategoria() {
+        // pesquisar todos os pedidos com produto da categoria 2
         String jpql = "select p from Pedido p where p.id in " +
                 "(select p2.id from ItemPedido i2 " +
                 "   join i2.pedido p2 join i2.produto pro2 join pro2.categorias c2 where c2.id = 2)";
@@ -97,5 +98,18 @@ public class SubqueriesTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(p -> System.out.println("ID: " + p.getId()));
+    }
+
+    @Test
+    public void clientesComDoisOuMaisPedidos() {
+        // Todos os clientes que fizeram dois ou mais pedidos
+        String jpql = "select c from Cliente c where " +
+                "(select count(cliente) from Pedido where cliente = c) >= 2";
+
+        TypedQuery<Cliente> typedQuery = entityManager.createQuery(jpql, Cliente.class);
+        List<Cliente> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId() + ", Nome: " + obj.getNome()));
     }
 }
