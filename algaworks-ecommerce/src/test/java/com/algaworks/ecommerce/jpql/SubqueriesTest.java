@@ -112,4 +112,17 @@ public class SubqueriesTest extends EntityManagerTest {
 
         lista.forEach(obj -> System.out.println("ID: " + obj.getId() + ", Nome: " + obj.getNome()));
     }
+
+    @Test
+    public void produtosNaoVendidosComPrecoAtual() {
+        // Todos os produtos que ainda não foram vendidos com o preço atual
+        String jpql = "select p from Produto p " +
+                "where exists (select 1 from ItemPedido " +
+                "              where produto = p and precoProduto <> p.preco)";
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("Nome: " + p.getNome() + ", preço: " + p.getPreco()));
+    }
 }
