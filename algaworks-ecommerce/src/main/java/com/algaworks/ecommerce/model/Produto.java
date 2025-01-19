@@ -17,6 +17,13 @@ import java.util.List;
         uniqueConstraints = {@UniqueConstraint(name = "unq_nome", columnNames = "nome")},
         indexes = {@Index(name = "idx_nome", columnList = "nome")})
 @EntityListeners({GenericoListener.class})
+@NamedQueries({
+        @NamedQuery(name = "Produto.listar", query = "select p from Produto p"),
+        @NamedQuery(name = "Produto.listarPorCategoria",
+                query = "select p from Produto p " +
+                        "where exists (select 1 from Categoria c2 join c2.produtos p2 " +
+                        "              where p2 = p and c2.id = :categoria)")
+})
 public class Produto extends EntidadeBaseInteger {
     @Column(length = 100, nullable = false)
     private String nome;
