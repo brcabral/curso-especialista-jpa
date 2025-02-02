@@ -5,6 +5,7 @@ import com.algaworks.ecommerce.model.Cliente;
 import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.Produto;
 import jakarta.persistence.Query;
+import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -84,5 +85,23 @@ public class BasicoCriteriaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(arr -> System.out.println("ID: " + arr[0] + ", nome: " + arr[1]));
+    }
+
+    @Test
+    public void projetarResultadoTuple() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
+        Root<Produto> root = criteriaQuery.from(Produto.class);
+
+        // criteriaQuery.multiselect(root.get("id"), root.get("nome"));
+        criteriaQuery.select(criteriaBuilder
+                .tuple(root.get("id").alias("id"), root.get("nome").alias("nome")));
+
+        TypedQuery<Tuple> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Tuple> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        // lista.forEach(t -> System.out.println("ID: " + t.get(0) + ", nome: " + t.get(1)));
+        lista.forEach(t -> System.out.println("ID: " + t.get("id") + ", nome: " + t.get("nome")));
     }
 }
