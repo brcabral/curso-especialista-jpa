@@ -1,6 +1,7 @@
 package com.algaworks.ecommerce.criteria;
 
 import com.algaworks.ecommerce.EntityManagerTest;
+import com.algaworks.ecommerce.dto.ProdutoDTO;
 import com.algaworks.ecommerce.model.Cliente;
 import com.algaworks.ecommerce.model.Pedido;
 import com.algaworks.ecommerce.model.Produto;
@@ -103,5 +104,21 @@ public class BasicoCriteriaTest extends EntityManagerTest {
 
         // lista.forEach(t -> System.out.println("ID: " + t.get(0) + ", nome: " + t.get(1)));
         lista.forEach(t -> System.out.println("ID: " + t.get("id") + ", nome: " + t.get("nome")));
+    }
+
+    @Test
+    public void projetarResultadoDTO() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ProdutoDTO> criteriaQuery = criteriaBuilder.createQuery(ProdutoDTO.class);
+        Root<Produto> root = criteriaQuery.from(Produto.class);
+
+        criteriaQuery.select(criteriaBuilder
+                .construct(ProdutoDTO.class, root.get("id"), root.get("nome")));
+
+        TypedQuery<ProdutoDTO> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<ProdutoDTO> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(dto -> System.out.println("ID: " + dto.getId() + ", nome: " + dto.getNome()));
     }
 }
