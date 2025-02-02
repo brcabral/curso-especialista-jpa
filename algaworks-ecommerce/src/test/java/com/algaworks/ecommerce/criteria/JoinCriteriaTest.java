@@ -1,10 +1,7 @@
 package com.algaworks.ecommerce.criteria;
 
 import com.algaworks.ecommerce.EntityManagerTest;
-import com.algaworks.ecommerce.model.Pagamento;
-import com.algaworks.ecommerce.model.Pedido;
-import com.algaworks.ecommerce.model.Produto;
-import com.algaworks.ecommerce.model.StatusPagamento;
+import com.algaworks.ecommerce.model.*;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.junit.jupiter.api.Assertions;
@@ -73,5 +70,20 @@ public class JoinCriteriaTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
         Pedido pedido = typedQuery.getSingleResult();
         Assertions.assertNotNull(pedido);
+    }
+
+    @Test
+    public void buscarPedidoComProdutoEspecifico() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        Join<Pedido, ItemPedido> joinItensPedido = root.join("itens");
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(joinItensPedido.get("produto").get("id"), 1));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
     }
 }
